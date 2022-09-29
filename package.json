@@ -1,0 +1,17 @@
+{
+  "name": "leaderboard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "web",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"yarn workspace server start\" \"yarn workspace web dev\""
+  },
+  "dependencies": {
+    "concurrently": "^7.4.0"
+  }
+}
