@@ -10,6 +10,5 @@ export const config = {
 };
 
 export default (req: IncomingMessage, res: ServerResponse) => {
-  console.log('req', req);
   proxy.web(req, res, { target: API_URL, changeOrigin: true });
 };
