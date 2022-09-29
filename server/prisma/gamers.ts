@@ -1,5 +1,3 @@
-import { PrismaClient } from '@prisma/client';
-
 function createUser(rank: number, name: string, pic: string, score: number) {
   return {
     rank, name, pic, score
@@ -16,7 +14,7 @@ function randomNumberInRank() {
 // could track ones already swapped as to not multiple swap
 for(let i = 0; i < ranks.length; i++) {
   const idx = randomNumberInRank() - 1;
-  [ranks[i]] = [ranks[idx]];
+  [ranks[i], ranks[idx]] = [ranks[idx], ranks[i]];
 }
 
 // gen some static scores from high to low for idx based ranking match
@@ -32,23 +30,24 @@ function* getGamer() {
 
 
 async function seeds() {
-  const prisma = new PrismaClient();
-  await prisma.gamer.deleteMany();
+  const dbClient = (await import("../src/dbclient")).default;
+  await dbClient.gamer.deleteMany();
 
   const nextGamer = getGamer();
   for (let i = 0; i<GAMER_TOTAL; i++) {
     const gamer = nextGamer.next().value;
     if (gamer) {
       console.log('generating gamer', gamer);
-      await prisma.gamer.create({
+      await dbClient.gamer.create({
         data: gamer
       });
     }
   }
 
-  const ct = await prisma.gamer.count();
+  const ct = await dbClient.gamer.count();
   console.log('ct', ct);
-  prisma.$disconnect();
+
+  dbClient.$disconnect();
 }
 
 seeds();
