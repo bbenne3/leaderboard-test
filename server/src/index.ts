@@ -13,6 +13,10 @@ app.use(bodyParser.json());
 
 
 app.use('/api/v1/leaderboard', leaderboard);
+
+app.use((err, _, res, next) => {
+  res.status(500).json({err_msg: err.message});
+})
 app.all('*', (req, res) => {
   res.status(404).send();
 });
