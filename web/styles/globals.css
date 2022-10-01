@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    background-image: linear-gradient(to right, rgba(20, 20, 20) 50%, rgba(20, 20, 20, 0.95));
+  }
+
+  .title {
+    @apply grid grid-flow-col-dense place-content-center text-2xl font-mono text-blue-400;
+    min-height: 6rem;
+    max-height: 8rem;
+    overflow: hidden;
+  }
+
+  .title .letter {
+    --title-idx: 0;
+    animation-name: flyin;
+    animation-duration: 0.875s;
+    animation-timing-function: cubic-bezier(1.000, 0.085, 0.280, 0.680);
+    animation-delay: calc(var(--title-idx) * 0.135s);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    transition: transfrom opacity;
+    transform: translateY(-200%);
+  }
+
+  .title .letter[data-blank=true] {
+    min-width: 1rem;
+  }
+
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 2s linear 2s forwards;
+  }
+
+  @keyframes flyin {
+    from {
+      @apply text-2xl;
+      opacity: 0;
+    }
+    to {
+      @apply text-5xl;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+      transform: opacity;
+    }
+  }
+}
