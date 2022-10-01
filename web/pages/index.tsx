@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Spinner from "../components/spinner";
 
 const title = "The Leader Board".split("");
 const filterKeys = ["page", "event_name", "view", "sortOrder"];
@@ -80,29 +81,42 @@ const Home: NextPage = () => {
     },
     {
       keepPreviousData: true,
+      retry(failureCount, error) {
+        return !(failureCount > 1);
+      },
     }
   );
 
   return (
     <div>
       <Head>
-        <title>Leaderboard</title>
+        <title>
+          The Leaderboard -{" "}
+          {queryState.view === "hundred" ? "Top 100" : "Global"}
+        </title>
         <meta name="description" content="View the leaderboard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <header className="grid grid-cols-10 min-h-[3rem]">
-        <div className="grid grid-cols-2 col-span-2 col-start-[9] place-items-center text-blue-400">
-          <Link passHref href="/login-in">
-            <a className="">Log In</a>
-          </Link>
-          <Link passHref href="/sign-up">
-            <a className="">Sign Up</a>
-          </Link>
+        <div className="grid grid-cols-2 col-span-2 col-start-[9] gap-4 place-items-center text-blue-400">
+          <div className="flex gap-4 col-span-2">
+            <Link passHref href="/login-in">
+              <a className="">Log In</a>
+            </Link>
+            <Link passHref href="/sign-up">
+              <a className="">Sign Up</a>
+            </Link>
+          </div>
         </div>
       </header>
       <main>
-        <h2 aria-label="The Leader Board" className="title">
+        <h2
+          aria-label={`The ${
+            queryState.view === "hundred" ? "Top 100" : "Global"
+          } Leaderboard`}
+          className="title"
+        >
           {title.map((letter, idx) => (
             <span
               aria-hidden
@@ -146,13 +160,12 @@ const Home: NextPage = () => {
                 <option value="global">Global</option>
               </select>
               <input
-                disabled={leaders.isFetching}
                 name="event_name"
                 placeholder="Gamer"
                 onChange={(e) => {
-                  updateQuery(router, { event_name: e.target.value });
+                  updateQuery(router, { event_name: e.target.value, page: 1 });
                 }}
-                value={queryState.event_name ?? ""}
+                value={eventName ?? ""}
                 className="h-[3rem] text-2xl border-x-slate-800 p-2 text-blue-400 appearance-none pl-6 pr-12 rounded-md"
               />
               <button
@@ -160,7 +173,7 @@ const Home: NextPage = () => {
                 onClick={() => {
                   updateQuery(router, { sortOrder: -1 * Number(sortOrder) });
                 }}
-                className="flex items-center border-blue-400 bg-black text-blue-400 text-2xl px-3 py-1 h-[3rem] rounded-md hover:bg-gray-900 transition-colors duration-500"
+                className="flex items-center border-blue-400 bg-black text-blue-400 text-2xl px-3 py-1 h-[3rem] rounded-md hover:bg-gray-800 focus:bg-gray-800 transition-colors duration-500"
               >
                 Rank{" "}
                 <span
@@ -207,16 +220,27 @@ const Home: NextPage = () => {
                 </a>
               </Link>
             </nav>
+            {queryState.page === "2" && (
+              <p className="text-center text-xs text-white">
+                Page 2 simulates network latency
+              </p>
+            )}
             <div
-              className="bg-slate-800 border-b-2 border-t-2 border-t-slate-800 border-b-blue-400 text-white mb-[-8rem] ml-[4rem] w-full min-h-[40vmax]"
+              className="relative bg-slate-800 border-b-2 border-t-2 border-t-slate-800 border-b-blue-400 text-white mb-[-8rem] ml-[4rem] w-full min-h-[40vmax]"
               style={{
                 backgroundImage: "linear-gradient(45deg, black, transparent)",
               }}
             >
+              {leaders.isError && !leaders.data?.entries.length && (
+                <div className="absolute inset-0 grid place-content-center">
+                  <h3 className="text-3xl">Unable to retrieve leaderboard</h3>
+                </div>
+              )}
               {leaders.data?.entries?.map((l) => (
                 <div
                   key={l.id}
-                  className={`flex relative items-center gap-8 ${
+                  tabIndex={0}
+                  className={`flex relative items-center gap-8 focus:bg-gradient-to-tr from-black to-blue-400 focus:scale-105 focus:z-10 transition-transform ${
                     l.rank === 1
                       ? "bg-blue-400"
                       : "bg-black border-b-2 border-blue-400"
@@ -253,6 +277,18 @@ const Home: NextPage = () => {
                   </div>
                 </div>
               ))}
+              <div
+                className={`absolute bg-blue-900 opacity-70 ${
+                  leaders.isLoading || leaders.isFetching ? "inset-0" : "hidden"
+                }`}
+              />
+              <div
+                className={`absolute inset-0 grid place-content-center ${
+                  leaders.isLoading || leaders.isFetching ? "" : "hidden"
+                }`}
+              >
+                <Spinner size="xl" />
+              </div>
             </div>
           </div>
           <div className="mt-24 text-blue-400 text-center">

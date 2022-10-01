@@ -5,6 +5,7 @@
 @layer base {
   body {
     background-image: linear-gradient(to right, rgba(20, 20, 20) 50%, rgba(20, 20, 20, 0.95));
+    scroll-behavior: smooth;
   }
 
   .title {
