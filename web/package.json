@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.8.0",
     "@types/http-proxy": "^1.17.9",
     "http-proxy": "^1.18.1",
     "next": "12.3.1",
