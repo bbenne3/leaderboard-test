@@ -6,7 +6,7 @@ From root directory run
     - installs all dependencies for **server** and **web** apps
 2. `yarn db:seed`
     - Seeds the **file system** database with 250 leaders
-3. `NEXT_PUBLIC_API_HOST=http://localhost:3003 yarn dev`
+3. `yarn dev`
     - spins up the api server on http://localhost:3003 and web server on http://localhost:3000
 
 
