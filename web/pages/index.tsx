@@ -190,7 +190,7 @@ const Home: NextPage = () => {
                   }}
                 />
               </button>
-              <button onClick={() => {leaders.refetch()}}>
+              <button aria-label="refresh leaderboard" className="w-8" onClick={() => {leaders.refetch()}}>
                 <Refresh loading={leaders.isFetching || leaders.isLoading} />
               </button>
             </header>
