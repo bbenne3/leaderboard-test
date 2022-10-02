@@ -17,3 +17,5 @@ From root directory run
 
 - Breakout Web React Page into multiple components for better readibility
 - Input sanitation
+
+<img width="1277" alt="Screen Shot 2022-10-01 at 10 32 14 PM" src="https://user-images.githubusercontent.com/10772407/193435318-b9be77df-6066-4a76-8671-82639f1de6ad.png">
