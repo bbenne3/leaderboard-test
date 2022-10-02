@@ -9,6 +9,7 @@
     "server"
   ],
   "scripts": {
+    "install": "concurrently \"yarn workspace server install\" \"yarn workspace web install\"",
     "dev": "concurrently \"yarn workspace server start\" \"yarn workspace web dev\"",
     "db:setup": "yarn workspace server db:setup",
     "db:seed": "yarn workspace server db:seed",

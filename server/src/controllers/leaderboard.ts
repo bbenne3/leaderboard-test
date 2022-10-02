@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-import { json } from 'body-parser';
 import express, { NextFunction } from 'express';
 import dbClient from '../dbclient';
 

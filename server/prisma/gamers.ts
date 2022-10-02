@@ -20,11 +20,12 @@ for(let i = 0; i < ranks.length; i++) {
 // gen some static scores from high to low for idx based ranking match
 const scores = Array.from({ length: GAMER_TOTAL }).map((_, i) => Math.ceil(50000000 / (i + 1)))
 
-function* getGamer() {
+async function* getGamer() {
   let i = 1;
   while(true) {
     const rank = ranks[i - 1];
-    yield createUser(rank, `Gamer ${i++}`, `https://xsgames.co/randomusers/avatar.php?g=pixel`, scores[rank - 1]);
+    const imageId = rank % 50; // there are only 50 images available?? works for now
+    yield createUser(rank, `Gamer ${i++}`, `https://xsgames.co/randomusers/assets/avatars/pixel/${imageId}.jpg`, scores[rank - 1]);
   }
 }
 
@@ -35,7 +36,7 @@ async function seeds() {
 
   const nextGamer = getGamer();
   for (let i = 0; i<GAMER_TOTAL; i++) {
-    const gamer = nextGamer.next().value;
+    const gamer = (await nextGamer.next()).value;
     if (gamer) {
       console.log('generating gamer', gamer);
       await dbClient.gamer.create({
