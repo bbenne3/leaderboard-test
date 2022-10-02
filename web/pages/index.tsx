@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Refresh from "../components/refresh";
 import Spinner from "../components/spinner";
 
 const title = "The Leader Board".split("");
@@ -188,6 +189,9 @@ const Home: NextPage = () => {
                     transition: "transform 0.5s ease-in-out",
                   }}
                 />
+              </button>
+              <button onClick={() => {leaders.refetch()}}>
+                <Refresh loading={leaders.isFetching || leaders.isLoading} />
               </button>
             </header>
             <nav className="text-center mb-2">

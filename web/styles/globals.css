@@ -36,6 +36,16 @@
     animation: fadeIn 2s linear 2s forwards;
   }
 
+  .spinning {
+    animation: spinning 1s infinite forwards;
+  }
+
+  @keyframes spinning {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
   @keyframes flyin {
     from {
       @apply text-2xl;
